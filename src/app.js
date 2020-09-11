@@ -23,14 +23,14 @@ app.use(express.static(publicDirectoryPath))
 app.get('', (req, res) => {
     res.render('index', {
         title: 'Weather',
-        name: 'Andrew Mead'
+        name: 'Architha V C'
     })
 })
 
 app.get('/about', (req, res) => {
     res.render('about', {
         title: 'About Me',
-        name: 'Andrew Mead'
+        name: 'Architha V C'
     })
 })
 
@@ -38,7 +38,7 @@ app.get('/help', (req, res) => {
     res.render('help', {
         helpText: 'This is some helpful text.',
         title: 'Help',
-        name: 'Andrew Mead'
+        name: 'Architha V C'
     })
 })
 
@@ -48,21 +48,25 @@ app.get('/weather', (req, res) => {
             error: 'You must provide an address!'
         })
     }
-
+console.log(req.query.address)
     geocode(req.query.address, (error, { latitude, longitude, location } = {}) => {
         if (error) {
             return res.send({ error })
         }
 
-        forecast(latitude, longitude, (error, forecastData) => {
+        forecast(latitude, longitude, (error, data) => {
             if (error) {
                 return res.send({ error })
             }
 
             res.send({
-                forecast: forecastData,
+                forecast: data.forcastDescription,
                 location,
-                address: req.query.address
+                address: req.query.address,
+                icon: data.forcastData.weather_icons[0],
+                temperature: data.forcastData.temperature,
+                precip: data.forcastData.precip,
+                humidity: data.forcastData.humidity
             })
         })
     })
@@ -84,7 +88,7 @@ app.get('/products', (req, res) => {
 app.get('/help/*', (req, res) => {
     res.render('404', {
         title: '404',
-        name: 'Andrew Mead',
+        name: 'Architha V C',
         errorMessage: 'Help article not found.'
     })
 })
@@ -92,7 +96,7 @@ app.get('/help/*', (req, res) => {
 app.get('*', (req, res) => {
     res.render('404', {
         title: '404',
-        name: 'Andrew Mead',
+        name: 'Architha V C',
         errorMessage: 'Page not found.'
     })
 })
